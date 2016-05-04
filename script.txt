@@ -1,0 +1,30 @@
+﻿#!/bin/bash
+#variables
+DIA_ACTUAL=`date +%a`
+FECHA_ACTUAL=`date +%Y-%m-%d`
+HORA_ACTUAL=`date +%H-%M`
+#contraseña de postgresql
+export PGPASSWORD=”123456″
+export PGUSER=”postgres”
+#nombre del archivo
+ARCH_RESP=”$FECHA_ACTUAL-$HORA_ACTUAL”
+#directorio
+DIR_RESP=”/var/www/Respaldos”
+#bases de datos
+DB_ARRAY=(‘documentos’ ‘BDConciliacion’)
+#respaldo
+index=0
+count=”${#DB_ARRAY[*]}”
+echo ‘respaldando servidor de base de datos’
+while [ $index -lt $count ];
+do
+#dbname=”${#DB_ARRAY[$index]}”
+echo ‘respaldando: ‘${DB_ARRAY[$index]-i}
+pg_dump -h localhost -F c -b -f $DIR_RESP/${DB_ARRAY[$index]}/${DB_ARRAY[$index]}-$ARCH_RESP.backup ${DB_ARRAY[$index] -i }
+##i=$((i+1))
+let “index = $index + 1”
+done
+#
+unset PGUSER
+unset PGPASSWORD
+
